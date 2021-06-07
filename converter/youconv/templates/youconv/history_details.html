@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>History_details</title>
+</head>
+<body>
+<form method="POST" class="converter">{% csrf_token %}
+<div>
+    <p>user: {{ history.user.username }}</p>
+    <p>file_name: {{ history.file_name }}</p>
+    <p>created: {{ history.created }}</p>
+    <p><a href="/media/{{ history.file_name }}" download>{{ history.file_name}}</a><p/>
+</div>
+</form>
+</body>
+</html>

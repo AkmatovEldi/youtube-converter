@@ -1,7 +1,7 @@
 import os
 
 from django.contrib.auth.models import User
-from django.http import HttpResponsePermanentRedirect, HttpResponse
+from django.http import Http404
 from django.shortcuts import render, redirect
 from .forms import UrlForm
 import youtube_dl
@@ -23,6 +23,7 @@ def redirect_by_link(request):
             url = link.cleaned_data['address']
             ydl_opts = {
                 'format': 'bestaudio/best',
+                'outtmpl': './media/%(title)s.%(ext)s',
                 'postprocessors': [{
                     'key': 'FFmpegExtractAudio',
                     'preferredcodec': 'mp3',
@@ -30,10 +31,26 @@ def redirect_by_link(request):
                 }],
                 'progress_hooks': [get_status],
             }
-            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                ydl.download([url])
-            file_path = os.path.join('/home/eldi/working/intership/2Task/youtube-converter/converter/', 'test.mp3')
-            History.objects.create(url=url, user=User.objects.first())
-            return FileResponse(open(file_path, 'rb'))
+            try:
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    info_dict = ydl.extract_info(url, download=False)
+                    video_title = info_dict.get('title', None)
+                    video_title += '.mp3'
+                    ydl.download([url])
+            except:
+                raise Http404()
+
+            file_path = os.path.join('/media/', video_title)
+            History.objects.create(url=url, user=request.user, file_name=video_title)
 
     return render(request, 'youconv/converter.html', {'link': link})
+
+
+def get_history(request):
+    histories = History.objects.filter(user=request.user, file_name__isnull=False)
+    return render(request, 'youconv/history.html', {'histories': histories})
+
+
+def get_history_details(request, history_id):
+    history = History.objects.get(id=history_id)
+    return render(request, 'youconv/history_details.html', {'history': history})
