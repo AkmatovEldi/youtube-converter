@@ -1,19 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'youconv/base.html' %}
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>History</title>
 </head>
-<body>
-<form method="POST" class="converter">{% csrf_token %}
-<div>
-    {% for history in histories %}
-        <div>
-            <h1><a href="{% url 'get_history_details' history_id=history.id  %}"> file_name: {{ history.id}}</a></h1>
-            <p> date: {{ history.created }}</p>
-        </div>
-    {% endfor %}
-</div>
-</form>
-</body>
-</html>
+{% block content %}
+    <div>
+        {% for history in histories %}
+            <div>
+                <h1><a href="{% url 'get-history-details' history_id=history.id %}"> file_name: {{ history.id }}</a>
+                </h1>
+                <p> date: {{ history.created }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

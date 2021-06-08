@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'youconv/base.html' %}
+
+{% block content %}
 <form method="POST" class="converter">{% csrf_token %}
   {{ link }}
-  <button type="submit">Отправить</button>
+  <button type="submit">Конвертировать</button>
 </form>
-</body>
-</html>
+{% endblock %}
+
