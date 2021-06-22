@@ -2,7 +2,8 @@
 
 {% block content %}
 <form method="POST" class="converter">{% csrf_token %}
-  {{ link }}
+    <p>Ссылка: {{ form.address }}</p>
+    <p>Почта: {{ form.user_email }}</p>
   <button type="submit">Конвертировать</button>
 </form>
 {% endblock %}

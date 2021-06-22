@@ -16,11 +16,12 @@ def get_status(d):
 
 
 def redirect_by_link(request):
-    link = UrlForm()
+    form = UrlForm()
     if request.method == 'POST':
-        link = UrlForm(request.POST)
-        if link.is_valid():
-            url = link.cleaned_data['address']
+        form = UrlForm(request.POST)
+        if form.is_valid():
+            url = form.cleaned_data['address']
+            user_email = form.cleaned_data['user_email']
             ydl_opts = {
                 'format': 'bestaudio/best',
                 'outtmpl': './media/%(title)s.%(ext)s',
@@ -40,10 +41,9 @@ def redirect_by_link(request):
             except:
                 raise Http404()
 
-            file_path = os.path.join('/media/', video_title)
             History.objects.create(url=url, user=request.user, file_name=video_title)
 
-    return render(request, 'youconv/converter.html', {'link': link})
+    return render(request, 'youconv/converter.html', {'form': form})
 
 
 def get_history(request):
