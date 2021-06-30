@@ -1,4 +1,8 @@
+import os
 from celery import Celery
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'converter.settings')
+
 
 app = Celery('converter',
              broker='redis://127.0.0.1:6379/0',
