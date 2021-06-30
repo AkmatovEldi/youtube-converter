@@ -22,5 +22,4 @@ def get_history(request):
 
 
 def get_history_details(request, history_id):
-    history = History.objects.get(id=history_id)
-    return render(request, 'youconv/history_details.html', {'history': history})
+    return render(request, 'youconv/history_details.html', {'history': History.objects.get(id=history_id)})

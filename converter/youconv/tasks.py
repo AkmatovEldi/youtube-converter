@@ -1,12 +1,8 @@
-from urllib.parse import quote
-
 import youtube_dl
-
+from urllib.parse import quote
 from converter.celery import app
 from django.contrib.auth import get_user_model
 from django.core.mail import EmailMessage
-
-
 
 User = get_user_model()
 
