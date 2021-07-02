@@ -31,8 +31,10 @@ def converting_send_massage(link, user_email, user_id, hostname):
             user = User.objects.get(id=user_id)
             History.objects.create(url=link, user=user, file_name=video_title)
             url = hostname + 'media/' + quote(video_title)
-            content = render_to_string('youconv/message.html') + url
+            content = render_to_string('youconv/message.html', context={'url': url})
+            content.Is
             send_message = EmailMessage('Конвертирование', content, to=[user_email])
+            send_message.content_subtype = 'html'
             send_message.send()
     except:
         pass
