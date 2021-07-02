@@ -12,7 +12,7 @@ def redirect_by_link(request):
             url = form.cleaned_data['address']
             user_email = form.cleaned_data['user_email']
             converting_send_massage.delay(url, user_email, request.user.id, request.build_absolute_uri())
-
+            return render(request, 'youconv/successful.html', {'user_email': user_email}) 
     return render(request, 'youconv/converter.html', {'form': form})
 
 

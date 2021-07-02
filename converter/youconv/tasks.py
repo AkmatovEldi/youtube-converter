@@ -3,6 +3,8 @@ from urllib.parse import quote
 from converter.celery import app
 from django.contrib.auth import get_user_model
 from django.core.mail import EmailMessage
+from django.template import Context
+from django.template.loader import get_template, render_to_string
 
 User = get_user_model()
 
@@ -29,7 +31,8 @@ def converting_send_massage(link, user_email, user_id, hostname):
             user = User.objects.get(id=user_id)
             History.objects.create(url=link, user=user, file_name=video_title)
             url = hostname + 'media/' + quote(video_title)
-            send_message = EmailMessage('Конвертирование', url, to=[user_email])
+            content = render_to_string('youconv/message.html') + url
+            send_message = EmailMessage('Конвертирование', content, to=[user_email])
             send_message.send()
     except:
         pass
